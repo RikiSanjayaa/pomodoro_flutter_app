@@ -27,9 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Timer? countdownTimer;
 
   int counter = 1;
-  final int workDuration = 10;
-  final int restDuration = 5;
-  Duration myDuration = const Duration(seconds: 10);
+  final int workDuration = 1500;
+  final int restDuration = 300;
+  Duration myDuration = const Duration(seconds: 1500);
 
   Color bgAppColor = const Color.fromARGB(255, 255, 255, 231);
   Color textColor = const Color.fromARGB(255, 43, 52, 103);
