@@ -1,5 +1,5 @@
 # Pomodoro App created using Flutter
-my first personal flutter projects using the knowledge I gained watching tutorials
+my first personal flutter projects using the knowledge I gained after watching tutorials
 
 ## Here are some little peek at how the app works and looks like:
 
