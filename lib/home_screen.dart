@@ -1,9 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pomodoro/play_button.dart';
-import 'package:pomodoro/tomato_counter.dart';
+
+import 'package:pomodoro/models/tomato_counter.dart';
+import 'package:pomodoro/buttons/first_start_button.dart';
+import 'package:pomodoro/buttons/restart_button.dart';
+import 'package:pomodoro/buttons/started_buttons.dart';
 
 class ResetPage extends StatelessWidget {
   const ResetPage({super.key});
@@ -23,20 +25,21 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
+const int workDuration = 1500; // work timer in seconds
+const int restDuration = 300; // rest timer in seconds
+
 class _HomeScreenState extends State<HomeScreen> {
   Timer? countdownTimer;
 
-  int counter = 1;
-  final int workDuration = 1500;
-  final int restDuration = 300;
-  Duration myDuration = const Duration(seconds: 1500);
+  int counter = 1; // count the work and rest timer
+  Duration myDuration = const Duration(seconds: workDuration);
 
   Color bgAppColor = const Color.fromARGB(255, 255, 255, 231);
   Color textColor = const Color.fromARGB(255, 43, 52, 103);
   String textBelowTimer = "Work Time";
-  bool isOnPause = false;
-  bool isNotFinish = true;
-  bool isStarted = false;
+  bool isStarted = false; // to make the starting button different
+  bool isOnPause = false; // to pause or start timer
+  bool isNotFinish = true; // to view the finish page
 
   void startTimer() {
     countdownTimer = Timer.periodic(
@@ -64,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
     stopTimer();
     setState(() {
       if (counter % 2 == 0) {
-        myDuration = Duration(seconds: restDuration);
+        myDuration = const Duration(seconds: restDuration);
       } else {
-        myDuration = Duration(seconds: workDuration);
+        myDuration = const Duration(seconds: workDuration);
       }
     });
   }
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // <-- timer work 25 menit
         stopTimer();
         setState(() {
-          myDuration = Duration(seconds: workDuration);
+          myDuration = const Duration(seconds: workDuration);
           bgAppColor = const Color.fromARGB(255, 255, 255, 231);
           textColor = const Color.fromARGB(255, 43, 52, 103);
           textBelowTimer = 'Work Time';
@@ -109,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // <-- timer istirahat 5 menit
         stopTimer();
         setState(() {
-          myDuration = Duration(seconds: restDuration);
+          myDuration = const Duration(seconds: restDuration);
           bgAppColor = const Color.fromARGB(255, 186, 215, 233);
           textColor = const Color.fromARGB(255, 43, 52, 103);
           textBelowTimer = 'Rest Time';
@@ -152,126 +155,51 @@ class _HomeScreenState extends State<HomeScreen> {
                 letterSpacing: 5,
               ),
             ),
-            isStarted
-                ? Text(
-                    textBelowTimer,
-                    style: GoogleFonts.roboto(
-                      fontSize: 24,
-                      color: textColor,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 2,
-                    ),
-                  )
-                : Text(
-                    "Let's Work!",
-                    style: GoogleFonts.roboto(
-                      fontSize: 24,
-                      color: textColor,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 2,
-                    ),
-                  ),
-            isStarted
-                ? isNotFinish
-                    ? isOnPause
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 70),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: PlayButton(
-                                    '',
-                                    onClick: resetCurrentTimer,
-                                    timerIcon: const Icon(
-                                        Icons.keyboard_double_arrow_left,
-                                        size: 50),
-                                    textColor: textColor,
-                                    buttonSize: 60,
-                                  ),
-                                ),
-                                PlayButton(
-                                  'Pause',
-                                  onClick: stopTimer,
-                                  timerIcon: const Icon(Icons.pause, size: 60),
-                                  textColor: textColor,
-                                  buttonSize: 80,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: PlayButton(
-                                    '',
-                                    onClick: resetPage,
-                                    timerIcon: const Icon(
-                                        Icons.restart_alt_rounded,
-                                        size: 50),
-                                    textColor: textColor,
-                                    buttonSize: 60,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 70),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: PlayButton(
-                                    '',
-                                    onClick: resetCurrentTimer,
-                                    timerIcon: const Icon(
-                                        Icons.keyboard_double_arrow_left,
-                                        size: 50),
-                                    textColor: textColor,
-                                    buttonSize: 60,
-                                  ),
-                                ),
-                                PlayButton(
-                                  'Start',
-                                  onClick: startTimer,
-                                  timerIcon: const Icon(
-                                      Icons.play_arrow_rounded,
-                                      size: 60),
-                                  textColor: textColor,
-                                  buttonSize: 80,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: PlayButton(
-                                    '',
-                                    onClick: resetPage,
-                                    timerIcon: const Icon(
-                                        Icons.restart_alt_rounded,
-                                        size: 50),
-                                    textColor: textColor,
-                                    buttonSize: 60,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                    : PlayButton(
-                        // <-- finish button, restart timer
-                        'Restart',
-                        onClick: resetPage,
-                        timerIcon:
-                            const Icon(Icons.restart_alt_rounded, size: 60),
-                        textColor: textColor,
-                        buttonSize: 80,
-                      )
-                : PlayButton(
-                    'Start',
-                    onClick: startFirstTime,
-                    timerIcon: const Icon(Icons.play_arrow, size: 60),
+            if (isStarted)
+              Text(
+                textBelowTimer,
+                style: GoogleFonts.roboto(
+                  fontSize: 24,
+                  color: textColor,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 2,
+                ),
+              )
+            else
+              Text(
+                "Let's Work!",
+                style: GoogleFonts.roboto(
+                  fontSize: 24,
+                  color: textColor,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 2,
+                ),
+              ),
+            if (isStarted)
+              if (isNotFinish)
+                if (isOnPause)
+                  StartedButtons(
+                    'Pause',
+                    pauseOrStart: stopTimer,
+                    resetCurrentTimer: resetCurrentTimer,
+                    resetPage: resetPage,
                     textColor: textColor,
-                    buttonSize: 80,
-                  ),
+                    buttonIcon: const Icon(Icons.pause, size: 60),
+                  )
+                else
+                  StartedButtons(
+                    'Start',
+                    pauseOrStart: startTimer,
+                    resetCurrentTimer: resetCurrentTimer,
+                    resetPage: resetPage,
+                    textColor: textColor,
+                    buttonIcon: const Icon(Icons.play_arrow_rounded, size: 60),
+                  )
+              else
+                RestartButton(resetPage: resetPage, textColor: textColor)
+            else
+              FirstStartButton(
+                  startFirstTime: startFirstTime, textColor: textColor)
           ],
         ),
       ),
