@@ -1,5 +1,8 @@
 # Pomodoro App created using Flutter
+
 my first personal flutter projects using the knowledge I gained after watching tutorials
+
+to run this project, clone this repo and then run "dart pub get" then "flutter create ." to get all necessary build files
 
 ## Here are some little peek at how the app works and looks like:
 
