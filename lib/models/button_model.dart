@@ -27,6 +27,7 @@ class PlayButton extends StatelessWidget {
             width: buttonSize,
             height: buttonSize,
             child: FloatingActionButton(
+              shape: const CircleBorder(),
               onPressed: onClick,
               backgroundColor: const Color.fromARGB(255, 235, 69, 95),
               foregroundColor: const Color.fromARGB(255, 255, 255, 231),
