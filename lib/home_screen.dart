@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:pomodoro/materials/colors.dart';
+import 'package:pomodoro/music_screen.dart';
 import 'package:pomodoro/timer_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,8 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Color _bgColor = MyColors.lightPrimaryColor;
-  Color _textColor = MyColors.darkPrimaryColor;
+  String _bgColor = 'yellow';
 
   @override
   void initState() {
@@ -31,24 +30,36 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   // get color from timer state
-  void getColor(bgColor, textColor) {
+  void getColor(String bgColor) {
     setState(() {
       _bgColor = bgColor;
-      _textColor = textColor;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = Theme.of(context).colorScheme.onBackground;
+    final Color redPrimary = Theme.of(context).colorScheme.primary;
+
+    late Color bgColor;
+    switch (_bgColor) {
+      case 'green':
+        bgColor = Theme.of(context).colorScheme.tertiary;
+        break;
+      case 'blue':
+        bgColor = Theme.of(context).colorScheme.secondary;
+      default:
+        bgColor = Theme.of(context).colorScheme.background;
+    }
     return Scaffold(
-        backgroundColor: _bgColor,
+        backgroundColor: bgColor,
         bottomNavigationBar: TabBar(
           controller: _tabController,
-          unselectedLabelColor: _textColor,
-          labelColor: MyColors.redPrimaryColor,
-          indicatorColor: MyColors.redPrimaryColor,
+          unselectedLabelColor: textColor,
+          labelColor: redPrimary,
+          indicatorColor: redPrimary,
           indicatorSize: TabBarIndicatorSize.tab,
-          dividerColor: _bgColor,
+          dividerColor: bgColor,
           tabs: const [
             Tab(icon: Icon(Icons.timer_rounded)),
             Tab(icon: Icon(Icons.music_note_rounded)),
@@ -58,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen>
           controller: _tabController,
           children: [
             TimerScreen(
-              getColors: getColor,
+              getBgColor: getColor,
             ),
-            Container(), // TODO: make a music player screen
+            const MusicScreen()
           ],
         ));
   }

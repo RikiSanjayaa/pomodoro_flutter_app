@@ -10,6 +10,7 @@ class StartedButtons extends StatelessWidget {
     required this.resetPage,
     required this.textColor,
     required this.buttonIcon,
+    required this.iconColor,
   });
 
   final void Function() pauseOrStart;
@@ -18,6 +19,7 @@ class StartedButtons extends StatelessWidget {
   final Icon buttonIcon;
   final Color textColor;
   final String buttonText;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class StartedButtons extends StatelessWidget {
               timerIcon: const Icon(Icons.keyboard_double_arrow_left, size: 50),
               textColor: textColor,
               buttonSize: 60,
+              iconColor: iconColor,
             ),
           ),
           PlayButton(
@@ -43,6 +46,7 @@ class StartedButtons extends StatelessWidget {
             timerIcon: buttonIcon,
             textColor: textColor,
             buttonSize: 80,
+            iconColor: iconColor,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -52,6 +56,7 @@ class StartedButtons extends StatelessWidget {
               timerIcon: const Icon(Icons.restart_alt_rounded, size: 50),
               textColor: textColor,
               buttonSize: 60,
+              iconColor: iconColor,
             ),
           ),
         ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro/home_screen.dart';
+import 'package:pomodoro/themes/dark_theme.dart';
+// import 'package:pomodoro/themes/light_theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,10 +12,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Pomodoro App',
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: const HomeScreen(),
+      theme: darkBlueMode,
     );
   }
 }

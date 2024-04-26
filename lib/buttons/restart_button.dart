@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro/models/button_model.dart';
 
 class RestartButton extends StatelessWidget {
-  const RestartButton(
-      {super.key, required this.resetPage, required this.textColor});
+  const RestartButton({
+    super.key,
+    required this.resetPage,
+    required this.textColor,
+    required this.iconColor,
+  });
 
   final void Function() resetPage;
   final Color textColor;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +22,7 @@ class RestartButton extends StatelessWidget {
       timerIcon: const Icon(Icons.restart_alt_rounded, size: 60),
       textColor: textColor,
       buttonSize: 80,
+      iconColor: iconColor,
     );
   }
 }
