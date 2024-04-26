@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Pomodoro App',
       debugShowCheckedModeBanner: false,
-      home: ResetPage(),
+      home: HomeScreen(),
     );
   }
 }

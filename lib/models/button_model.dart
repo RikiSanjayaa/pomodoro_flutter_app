@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pomodoro/materials/colors.dart';
 
 class PlayButton extends StatelessWidget {
   const PlayButton(
@@ -29,8 +30,8 @@ class PlayButton extends StatelessWidget {
             child: FloatingActionButton(
               shape: const CircleBorder(),
               onPressed: onClick,
-              backgroundColor: const Color.fromARGB(255, 235, 69, 95),
-              foregroundColor: const Color.fromARGB(255, 255, 255, 231),
+              backgroundColor: MyColors.redPrimaryColor,
+              foregroundColor: MyColors.lightPrimaryColor,
               elevation: 0,
               focusElevation: 0,
               child: timerIcon,
