@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:pomodoro/music_screen.dart';
+import 'package:pomodoro/themes/theme_provider.dart';
 import 'package:pomodoro/timer_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,6 +55,38 @@ class _HomeScreenState extends State<HomeScreen>
     }
     return Scaffold(
         backgroundColor: bgColor,
+        appBar: AppBar(
+          backgroundColor: bgColor,
+        ),
+        drawer: Drawer(
+          backgroundColor: bgColor,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 100, bottom: 50),
+                child: Center(
+                  child: Icon(
+                    Icons.settings,
+                    size: 40,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: SwitchListTile(
+                  title: const Text("D A R K  M O D E"),
+                  value: Provider.of<ThemeProvider>(context, listen: false)
+                      .isDarkMode,
+                  onChanged: (value) {
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .toggleTheme();
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
         bottomNavigationBar: TabBar(
           controller: _tabController,
           unselectedLabelColor: textColor,
