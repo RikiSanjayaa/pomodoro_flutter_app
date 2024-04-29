@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:pomodoro/music_screen.dart';
 import 'package:pomodoro/themes/theme_provider.dart';
+import 'package:pomodoro/timer_provider.dart';
 import 'package:pomodoro/timer_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    int workTimerInMinutes =
+        Provider.of<TimerProvider>(context, listen: true).workTime;
+    int restTimerInMinutes =
+        Provider.of<TimerProvider>(context, listen: true).restTime;
     final Color textColor = Theme.of(context).colorScheme.onBackground;
     final Color redPrimary = Theme.of(context).colorScheme.primary;
 
@@ -83,7 +88,51 @@ class _HomeScreenState extends State<HomeScreen>
                         .toggleTheme();
                   },
                 ),
-              )
+              ),
+              // work time setting
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: ListTile(
+                  leading: const Text(
+                    'W O R K  T I M E',
+                    style:
+                        TextStyle(fontSize: 17, fontWeight: FontWeight.normal),
+                  ),
+                  title: Slider(
+                    value: workTimerInMinutes.toDouble(),
+                    min: 1,
+                    max: 60,
+                    divisions: 59,
+                    label: '${workTimerInMinutes.toString()} minutes',
+                    onChanged: (double value) {
+                      Provider.of<TimerProvider>(context, listen: false)
+                          .workTime = value.toInt();
+                    },
+                  ),
+                ),
+              ),
+              // rest time setting
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: ListTile(
+                  leading: const Text(
+                    'R E S T  T I M E',
+                    style:
+                        TextStyle(fontSize: 17, fontWeight: FontWeight.normal),
+                  ),
+                  title: Slider(
+                    value: restTimerInMinutes.toDouble(),
+                    min: 1,
+                    max: 30,
+                    divisions: 29,
+                    label: '${restTimerInMinutes.toString()} minutes',
+                    onChanged: (double value) {
+                      Provider.of<TimerProvider>(context, listen: false)
+                          .restTime = value.toInt();
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),

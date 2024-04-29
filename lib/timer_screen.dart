@@ -7,6 +7,8 @@ import 'package:pomodoro/models/tomato_counter.dart';
 import 'package:pomodoro/buttons/first_start_button.dart';
 import 'package:pomodoro/buttons/restart_button.dart';
 import 'package:pomodoro/buttons/started_buttons.dart';
+import 'package:pomodoro/timer_provider.dart';
+import 'package:provider/provider.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key, required this.getBgColor});
@@ -17,9 +19,6 @@ class TimerScreen extends StatefulWidget {
   State<TimerScreen> createState() => _TimerScreenState();
 }
 
-const int workDuration = 2; // work timer in seconds (1500) 25 min
-const int restDuration = 1; // rest timer in seconds (300) 5 min
-
 class _TimerScreenState extends State<TimerScreen>
     with AutomaticKeepAliveClientMixin {
   Timer? countdownTimer;
@@ -27,7 +26,19 @@ class _TimerScreenState extends State<TimerScreen>
   String _iconColor = 'yellow';
 
   int counter = 1; // count the work and rest timer
-  Duration myDuration = const Duration(seconds: workDuration);
+  late int workDuration;
+  late int restDuration;
+  late Duration myDuration;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    workDuration =
+        Provider.of<TimerProvider>(context, listen: true).workTime * 60;
+    restDuration =
+        Provider.of<TimerProvider>(context, listen: true).restTime * 60;
+    myDuration = Duration(seconds: workDuration);
+  }
 
   String textBelowTimer = "Work Time";
   bool isStarted = false; // to make the starting button different
@@ -60,9 +71,9 @@ class _TimerScreenState extends State<TimerScreen>
     stopTimer();
     setState(() {
       if (counter % 2 == 0) {
-        myDuration = const Duration(seconds: restDuration);
+        myDuration = Duration(seconds: restDuration);
       } else {
-        myDuration = const Duration(seconds: workDuration);
+        myDuration = Duration(seconds: workDuration);
       }
     });
   }
@@ -95,7 +106,7 @@ class _TimerScreenState extends State<TimerScreen>
           // <-- timer work 25 menit
           stopTimer();
           setState(() {
-            myDuration = const Duration(seconds: workDuration);
+            myDuration = Duration(seconds: workDuration);
             _iconColor = 'yellow';
             widget.getBgColor(_iconColor);
             textBelowTimer = 'Work Time';
@@ -106,7 +117,7 @@ class _TimerScreenState extends State<TimerScreen>
           // <-- timer istirahat 5 menit
           stopTimer();
           setState(() {
-            myDuration = const Duration(seconds: restDuration);
+            myDuration = Duration(seconds: restDuration);
             _iconColor = 'blue';
             widget.getBgColor(_iconColor);
             textBelowTimer = 'Rest Time';
