@@ -37,7 +37,11 @@ class _TimerScreenState extends State<TimerScreen>
         Provider.of<TimerProvider>(context, listen: true).workTime * 60;
     restDuration =
         Provider.of<TimerProvider>(context, listen: true).restTime * 60;
-    myDuration = Duration(seconds: workDuration);
+    if (counter % 2 == 0) {
+      myDuration = Duration(seconds: restDuration);
+    } else {
+      myDuration = Duration(seconds: workDuration);
+    }
   }
 
   String textBelowTimer = "Work Time";
