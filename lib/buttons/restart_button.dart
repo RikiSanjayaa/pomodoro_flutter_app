@@ -5,24 +5,18 @@ class RestartButton extends StatelessWidget {
   const RestartButton({
     super.key,
     required this.resetPage,
-    required this.textColor,
-    required this.iconColor,
   });
 
   final void Function() resetPage;
-  final Color textColor;
-  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
     return PlayButton(
       // <-- finish button, restart timer
-      'Restart',
+      textString: 'Restart',
       onClick: resetPage,
       timerIcon: const Icon(Icons.restart_alt_rounded, size: 60),
-      textColor: textColor,
       buttonSize: 80,
-      iconColor: iconColor,
     );
   }
 }

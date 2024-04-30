@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pomodoro/home_screen.dart';
+import 'package:pomodoro/providers/theme_provider.dart';
+import 'package:pomodoro/screens/home_screen.dart';
 
 import 'package:pomodoro/models/tomato_counter.dart';
 import 'package:pomodoro/buttons/first_start_button.dart';
 import 'package:pomodoro/buttons/restart_button.dart';
 import 'package:pomodoro/buttons/started_buttons.dart';
-import 'package:pomodoro/timer_provider.dart';
+import 'package:pomodoro/providers/timer_provider.dart';
 import 'package:provider/provider.dart';
 
 class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key, required this.getBgColor});
-
-  final Function getBgColor;
+  const TimerScreen({super.key});
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
@@ -22,8 +21,6 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen>
     with AutomaticKeepAliveClientMixin {
   Timer? countdownTimer;
-
-  String _iconColor = 'yellow';
 
   int counter = 1; // count the work and rest timer
   late int workDuration;
@@ -83,6 +80,8 @@ class _TimerScreenState extends State<TimerScreen>
   }
 
   void resetPage() {
+    Provider.of<ThemeProvider>(context, listen: false)
+        .changeBgColor(Theme.of(context).colorScheme.background, 'background');
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -100,8 +99,10 @@ class _TimerScreenState extends State<TimerScreen>
         if (seconds < 0 && counter == 8) {
           // <-- kapan berenti timernya setelah 8 kali
           setState(() {
-            _iconColor = 'green';
-            widget.getBgColor(_iconColor);
+            // _iconColor = 'green';
+            // widget.getBgColor(_iconColor);
+            Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
+                Theme.of(context).colorScheme.tertiary, 'tertiary');
             textBelowTimer = 'Good Work!';
             isNotFinish = false;
             countdownTimer!.cancel();
@@ -111,8 +112,10 @@ class _TimerScreenState extends State<TimerScreen>
           stopTimer();
           setState(() {
             myDuration = Duration(seconds: workDuration);
-            _iconColor = 'yellow';
-            widget.getBgColor(_iconColor);
+            // _iconColor = 'yellow';
+            // widget.getBgColor(_iconColor);
+            Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
+                Theme.of(context).colorScheme.background, 'background');
             textBelowTimer = 'Work Time';
           });
           counter++;
@@ -122,8 +125,10 @@ class _TimerScreenState extends State<TimerScreen>
           stopTimer();
           setState(() {
             myDuration = Duration(seconds: restDuration);
-            _iconColor = 'blue';
-            widget.getBgColor(_iconColor);
+            // _iconColor = 'blue';
+            // widget.getBgColor(_iconColor);
+            Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
+                Theme.of(context).colorScheme.secondary, 'secondary');
             textBelowTimer = 'Rest Time';
           });
           counter++;
@@ -140,16 +145,6 @@ class _TimerScreenState extends State<TimerScreen>
     super.build(context);
 
     Color textColor = Theme.of(context).colorScheme.onBackground;
-    late Color iconColor;
-    switch (_iconColor) {
-      case 'green':
-        iconColor = Theme.of(context).colorScheme.tertiary;
-        break;
-      case 'blue':
-        iconColor = Theme.of(context).colorScheme.secondary;
-      default:
-        iconColor = Theme.of(context).colorScheme.background;
-    }
 
     String strDigits(int n) => n.toString().padLeft(2, '0');
 
@@ -205,9 +200,7 @@ class _TimerScreenState extends State<TimerScreen>
                   pauseOrStart: stopTimer,
                   resetCurrentTimer: resetCurrentTimer,
                   resetPage: resetPage,
-                  textColor: textColor,
                   buttonIcon: const Icon(Icons.pause, size: 60),
-                  iconColor: iconColor,
                 )
               else
                 StartedButtons(
@@ -215,21 +208,15 @@ class _TimerScreenState extends State<TimerScreen>
                   pauseOrStart: startTimer,
                   resetCurrentTimer: resetCurrentTimer,
                   resetPage: resetPage,
-                  textColor: textColor,
                   buttonIcon: const Icon(Icons.play_arrow_rounded, size: 60),
-                  iconColor: iconColor,
                 )
             else
               RestartButton(
                 resetPage: resetPage,
-                textColor: textColor,
-                iconColor: iconColor,
               )
           else
             FirstStartButton(
               startFirstTime: startFirstTime,
-              textColor: textColor,
-              iconColor: iconColor,
             )
         ],
       ),

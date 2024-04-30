@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro/home_screen.dart';
-import 'package:pomodoro/themes/theme_provider.dart';
-import 'package:pomodoro/timer_provider.dart';
+import 'package:pomodoro/screens/home_screen.dart';
+import 'package:pomodoro/providers/theme_provider.dart';
+import 'package:pomodoro/providers/timer_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:pomodoro/themes/light_theme.dart';
 
