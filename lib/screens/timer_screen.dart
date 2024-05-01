@@ -11,6 +11,10 @@ import 'package:pomodoro/buttons/started_buttons.dart';
 import 'package:pomodoro/providers/timer_provider.dart';
 import 'package:provider/provider.dart';
 
+enum TimerState { initial, started, paused, finished }
+
+TimerState _timerState = TimerState.initial;
+
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
@@ -41,30 +45,32 @@ class _TimerScreenState extends State<TimerScreen>
     }
   }
 
-  String textBelowTimer = "Work Time";
-  bool isStarted = false; // to make the starting button different
-  bool isOnPause = false; // to pause or start timer
-  bool isNotFinish = true; // to view the finish page
+  String textBelowTimer = "Let's Work";
 
   void startTimer() {
-    countdownTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) => setCountDown(),
-    );
     setState(() {
-      isOnPause = true;
+      countdownTimer = Timer.periodic(
+        const Duration(seconds: 1),
+        (_) => setCountDown(),
+      );
+      _timerState = TimerState.started;
     });
   }
 
   void startFirstTime() {
-    isStarted = true;
+    setState(() {
+      _timerState = TimerState.started;
+      textBelowTimer = 'Work Time';
+    });
     startTimer();
   }
 
   void stopTimer() {
     setState(() {
-      countdownTimer!.cancel();
-      isOnPause = false;
+      if (countdownTimer != null) {
+        countdownTimer!.cancel();
+      }
+      _timerState = TimerState.paused;
     });
   }
 
@@ -80,6 +86,7 @@ class _TimerScreenState extends State<TimerScreen>
   }
 
   void resetPage() {
+    _timerState = TimerState.initial;
     Provider.of<ThemeProvider>(context, listen: false)
         .changeBgColor(Theme.of(context).colorScheme.background, 'background');
     Navigator.pushReplacement(
@@ -99,12 +106,11 @@ class _TimerScreenState extends State<TimerScreen>
         if (seconds < 0 && counter == 8) {
           // <-- kapan berenti timernya setelah 8 kali
           setState(() {
-            // _iconColor = 'green';
-            // widget.getBgColor(_iconColor);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.tertiary, 'tertiary');
             textBelowTimer = 'Good Work!';
-            isNotFinish = false;
+            // isNotFinish = false;
+            _timerState = TimerState.finished;
             countdownTimer!.cancel();
           });
         } else if (seconds < 0 && counter % 2 == 0) {
@@ -112,8 +118,6 @@ class _TimerScreenState extends State<TimerScreen>
           stopTimer();
           setState(() {
             myDuration = Duration(seconds: workDuration);
-            // _iconColor = 'yellow';
-            // widget.getBgColor(_iconColor);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.background, 'background');
             textBelowTimer = 'Work Time';
@@ -125,8 +129,6 @@ class _TimerScreenState extends State<TimerScreen>
           stopTimer();
           setState(() {
             myDuration = Duration(seconds: restDuration);
-            // _iconColor = 'blue';
-            // widget.getBgColor(_iconColor);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.secondary, 'secondary');
             textBelowTimer = 'Rest Time';
@@ -137,6 +139,36 @@ class _TimerScreenState extends State<TimerScreen>
           myDuration = Duration(seconds: seconds);
         }
       });
+    }
+  }
+
+  // buttons widgets
+  Widget getButttonBasedOnState() {
+    switch (_timerState) {
+      case TimerState.initial:
+        return FirstStartButton(
+          startFirstTime: startFirstTime,
+        );
+      case TimerState.started:
+        return StartedButtons(
+          'Pause',
+          pauseOrStart: stopTimer,
+          resetCurrentTimer: resetCurrentTimer,
+          resetPage: resetPage,
+          buttonIcon: const Icon(Icons.pause, size: 60),
+        );
+      case TimerState.paused:
+        return StartedButtons(
+          'Start',
+          pauseOrStart: startTimer,
+          resetCurrentTimer: resetCurrentTimer,
+          resetPage: resetPage,
+          buttonIcon: const Icon(Icons.play_arrow_rounded, size: 60),
+        );
+      case TimerState.finished:
+        return RestartButton(
+          resetPage: resetPage,
+        );
     }
   }
 
@@ -172,52 +204,18 @@ class _TimerScreenState extends State<TimerScreen>
               letterSpacing: 5,
             ),
           ),
-          if (isStarted)
-            Text(
-              textBelowTimer,
-              style: GoogleFonts.roboto(
-                fontSize: 24,
-                color: textColor,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 2,
-              ),
-            )
-          else
-            Text(
-              "Let's Work!",
-              style: GoogleFonts.roboto(
-                fontSize: 24,
-                color: textColor,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 2,
-              ),
+          Text(
+            textBelowTimer,
+            style: GoogleFonts.roboto(
+              fontSize: 24,
+              color: textColor,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 2,
             ),
-          if (isStarted)
-            if (isNotFinish)
-              if (isOnPause)
-                StartedButtons(
-                  'Pause',
-                  pauseOrStart: stopTimer,
-                  resetCurrentTimer: resetCurrentTimer,
-                  resetPage: resetPage,
-                  buttonIcon: const Icon(Icons.pause, size: 60),
-                )
-              else
-                StartedButtons(
-                  'Start',
-                  pauseOrStart: startTimer,
-                  resetCurrentTimer: resetCurrentTimer,
-                  resetPage: resetPage,
-                  buttonIcon: const Icon(Icons.play_arrow_rounded, size: 60),
-                )
-            else
-              RestartButton(
-                resetPage: resetPage,
-              )
-          else
-            FirstStartButton(
-              startFirstTime: startFirstTime,
-            )
+          ),
+
+          // buttons:
+          getButttonBasedOnState()
         ],
       ),
     );
