@@ -190,7 +190,7 @@ class _TimerScreenState extends State<TimerScreen>
           TomatoCounter(counter: counter),
           Image.asset(
             'assets/images/tomato.png',
-            width: 230,
+            width: MediaQuery.of(context).size.width * 0.5,
           ),
           const SizedBox(
             height: 75,
