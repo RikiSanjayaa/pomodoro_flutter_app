@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro/screens/home_screen.dart';
 import 'package:pomodoro/providers/theme_provider.dart';
 import 'package:pomodoro/providers/timer_provider.dart';
+import 'package:pomodoro/services/local_notifications.dart';
 import 'package:provider/provider.dart';
-// import 'package:pomodoro/themes/light_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalNotifications.init();
   runApp(
     MultiProvider(
       providers: [

@@ -9,6 +9,7 @@ import 'package:pomodoro/buttons/first_start_button.dart';
 import 'package:pomodoro/buttons/restart_button.dart';
 import 'package:pomodoro/buttons/started_buttons.dart';
 import 'package:pomodoro/providers/timer_provider.dart';
+import 'package:pomodoro/services/local_notifications.dart';
 import 'package:provider/provider.dart';
 
 enum TimerState { initial, started, paused, finished }
@@ -34,10 +35,8 @@ class _TimerScreenState extends State<TimerScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    workDuration =
-        Provider.of<TimerProvider>(context, listen: true).workTime * 60;
-    restDuration =
-        Provider.of<TimerProvider>(context, listen: true).restTime * 60;
+    workDuration = Provider.of<TimerProvider>(context, listen: true).workTime;
+    restDuration = Provider.of<TimerProvider>(context, listen: true).restTime;
     if (counter % 2 == 0) {
       myDuration = Duration(seconds: restDuration);
     } else {
@@ -106,6 +105,11 @@ class _TimerScreenState extends State<TimerScreen>
         if (seconds < 0 && counter == 8) {
           // <-- kapan berenti timernya setelah 8 kali
           setState(() {
+            LocalNotifications.showNotification(
+              title: 'Good Job!',
+              body: 'You have completed a full set of pomodoro timer!',
+              payload: 'finish notification',
+            );
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.tertiary, 'tertiary');
             textBelowTimer = 'Good Work!';
@@ -117,6 +121,11 @@ class _TimerScreenState extends State<TimerScreen>
           // <-- timer work 25 menit
           stopTimer();
           setState(() {
+            LocalNotifications.showNotification(
+              title: 'Work Time!',
+              body: 'have enough rest? lets work again!',
+              payload: 'work time notification',
+            );
             myDuration = Duration(seconds: workDuration);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.background, 'background');
@@ -128,6 +137,11 @@ class _TimerScreenState extends State<TimerScreen>
           // <-- timer istirahat 5 menit
           stopTimer();
           setState(() {
+            LocalNotifications.showNotification(
+              title: 'Rest Time!',
+              body: 'Great work! now its time to rest',
+              payload: 'rest time notification',
+            );
             myDuration = Duration(seconds: restDuration);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
                 Theme.of(context).colorScheme.secondary, 'secondary');
