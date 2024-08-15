@@ -43,7 +43,7 @@ class PlayButton extends StatelessWidget {
                 textString,
                 style: GoogleFonts.roboto(
                   fontSize: 24,
-                  color: Theme.of(context).colorScheme.onBackground,
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 2,
                 ),

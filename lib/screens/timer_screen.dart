@@ -87,7 +87,7 @@ class _TimerScreenState extends State<TimerScreen>
   void resetPage() {
     _timerState = TimerState.initial;
     Provider.of<ThemeProvider>(context, listen: false)
-        .changeBgColor(Theme.of(context).colorScheme.background, 'background');
+        .changeBgColor(Theme.of(context).colorScheme.surface, 'background');
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -128,7 +128,7 @@ class _TimerScreenState extends State<TimerScreen>
             );
             myDuration = Duration(seconds: workDuration);
             Provider.of<ThemeProvider>(context, listen: false).changeBgColor(
-                Theme.of(context).colorScheme.background, 'background');
+                Theme.of(context).colorScheme.surface, 'background');
             textBelowTimer = 'Work Time';
           });
           counter++;
@@ -190,7 +190,7 @@ class _TimerScreenState extends State<TimerScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    Color textColor = Theme.of(context).colorScheme.onBackground;
+    Color textColor = Theme.of(context).colorScheme.onSurface;
 
     String strDigits(int n) => n.toString().padLeft(2, '0');
 

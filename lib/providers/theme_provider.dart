@@ -8,8 +8,8 @@ class ThemeProvider extends ChangeNotifier {
   late Color _bgColor;
   late String _currentBgColor;
 
-  ThemeProvider() : _bgColor = lightYellowMode.colorScheme.background {
-    _bgColor = _themeData.colorScheme.background;
+  ThemeProvider() : _bgColor = lightYellowMode.colorScheme.surface {
+    _bgColor = _themeData.colorScheme.surface;
     _currentBgColor = 'background';
   }
 
@@ -58,7 +58,7 @@ class ThemeProvider extends ChangeNotifier {
           bgColor = darkBlueMode.colorScheme.tertiary;
           break;
         default:
-          bgColor = darkBlueMode.colorScheme.background;
+          bgColor = darkBlueMode.colorScheme.surface;
       }
     } else {
       themeData = lightYellowMode;
@@ -70,7 +70,7 @@ class ThemeProvider extends ChangeNotifier {
           bgColor = lightYellowMode.colorScheme.tertiary;
           break;
         default:
-          bgColor = lightYellowMode.colorScheme.background;
+          bgColor = lightYellowMode.colorScheme.surface;
       }
     }
   }
